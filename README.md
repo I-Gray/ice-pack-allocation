@@ -1,5 +1,5 @@
 # Ice Pack Allocator 🧊
-Allocates a specified number of ice-packs to a customers box calculated by considering:
+Allocates a specified number of ice-packs to a box calculated by considering:
 - A range of defined temperature bands for different sized cool pouches
 - The predicted temperature for the postcode on the planned delivery date of the box
 - A set of configurable fall back constants for ranges not explicitly specificed in the range data
@@ -179,4 +179,4 @@ class BoxAssignedIce:
         |___|    \___| |___|  |_|\_|    \___|     \___|  \___/  |_|  |_| |_|    |____| |___|   |_|    |___| 
 ```
 
-:)
+🐝
