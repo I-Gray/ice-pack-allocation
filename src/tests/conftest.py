@@ -1,10 +1,8 @@
-import textwrap
 from datetime import datetime
 from typing import List
 from unittest.mock import MagicMock
 
 import pytest
-from datetime import datetime
 
 from domain.models import Box, IceTemperatureRanges, BoxAssignedIce
 
@@ -114,4 +112,3 @@ def mock_weather_response():
         ]
     }
     return response
-

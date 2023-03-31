@@ -19,7 +19,8 @@ class WeatherService:
         :api-docs https://dev.meteostat.net/api/
         :param postcode: the delivery postcode of the customers order
         :param delivery_date: the date the order is planned to be delivered
-        :return: avg_daily_temp: the average temperature for the postcode on the delivery_date
+        :return: avg_daily_temp: the average temperature for the
+        postcode on the delivery_date
         """
         lat, lon = get_lat_long_from_postcode(postcode)
 
@@ -56,7 +57,8 @@ class WeatherService:
 
         except Exception as e:
             logging.error(
-                f"err: exception occurred when attempting to get weather information for the following query params - "
+                f"err: exception occurred when attempting to get "
+                f"weather information for the following query params - "
                 f"{query_params}"
             )
             raise e
@@ -84,7 +86,8 @@ def get_lat_long_from_postcode(postcode: str) -> Tuple[float, float]:
 
     except Exception as e:
         logging.error(
-            f"err: exception occurred when attempting to get and return latitude and longitude for postcode - "
+            f"err: exception occurred when attempting to get "
+            f"and return latitude and longitude for postcode - "
             f"{postcode}"
         )
         raise e

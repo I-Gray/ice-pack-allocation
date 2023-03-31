@@ -1,8 +1,8 @@
 import logging
 from typing import List, Tuple
 
-from domain.models import IceTemperatureRanges, Box, BoxAssignedIce
-from utils import read_csv, write_csv
+from domain.models import IceTemperatureRanges, Box
+from utils import read_csv
 
 
 def import_data(data_filepath: str) -> Tuple[List[Box], List[IceTemperatureRanges]]:

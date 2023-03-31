@@ -1,5 +1,3 @@
-import configparser
-import json
 import logging
 from typing import List, Type, TypeVar, cast
 
@@ -11,10 +9,10 @@ T = TypeVar("T")
 def log_output_file_head(output_filepath: str, state: str) -> None:
     df = pd.read_csv(output_filepath)
     logging.info(f"""
-    
+
         {state} boxes head (5 records) - located at {output_filepath} :
         {df.head()}
-        
+
         open the csv file to see the other orders (if any)
     """)
 

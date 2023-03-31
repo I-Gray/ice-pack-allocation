@@ -25,7 +25,8 @@ class IcePackConfigurator:
                 )
             except PostCodeNotFoundException as e:
                 self.skipped_boxes = []
-                logging.info(f'{e.postcode} could not be fetched. Skipping box with box_id = {box.box_id}')
+                logging.info(f'{e.postcode} could not be fetched. '
+                             f'Skipping box with box_id = {box.box_id}')
                 self.skipped_boxes.append(box)
                 continue
 

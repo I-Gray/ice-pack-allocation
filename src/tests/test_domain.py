@@ -1,17 +1,12 @@
 import logging
-import textwrap
-from datetime import datetime
-from io import StringIO
-from typing import Tuple
+from unittest.mock import Mock
 
-from unittest.mock import Mock, patch
 import pytest
 
 from domain import constants
 from domain.data_handle import get_boxes, get_temp_ranges
 from domain.icepack_configurator import assign_ice_packs_to_order, IcePackConfigurator
-from utils import read_csv, write_csv
-from unittest.mock import MagicMock, patch
+from utils import write_csv
 
 
 @pytest.mark.parametrize(

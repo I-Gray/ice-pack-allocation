@@ -63,4 +63,3 @@ def test_get_daily_temperature_avg(mock_get, mock_lat_long, mock_weather_respons
         },
         params={"lat": 51.5074, "lon": 0.1278, "start": "2023-04-01", "end": "2023-04-01"},
     )
-
