@@ -1,3 +1,7 @@
+# Custom Ignore
+src/config.json
+
+# ___ Github Default Ignore Below ___
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

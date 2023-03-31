@@ -1,0 +1,8 @@
+{
+    "DEFAULT": {
+        "log_level": "logging.DEBUG"
+    },
+    "SECRET": {
+        "meteostat_api_key": ""
+    }
+}
