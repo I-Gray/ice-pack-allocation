@@ -25,12 +25,17 @@ def main():
         temperature_ranges=temperature_ranges,
         get_temp=ws.get_daily_temperature_avg,
     )
-    boxes_with_ice = icepack_config.pack_boxes_with_ices()
+    boxes_with_ice, skipped_boxes = icepack_config.pack_boxes_with_ices()
 
-    # Write output to CSV file
+    # Write output to assigned boxes CSV file
     output_filepath = "output/orders_assigned_w_ice.csv"
     write_csv(output_filepath, boxes_with_ice)
-    log_output_file_head(output_filepath)
+    log_output_file_head(output_filepath, "completed")
+
+    # Write output for missing boxes to CSV
+    output_filepath = "output/orders_skipped.csv"
+    write_csv(output_filepath, skipped_boxes)
+    log_output_file_head(output_filepath, "missing")
 
     # Shutdown sequence
     shut_down_logs()

@@ -8,13 +8,14 @@ import pandas as pd
 T = TypeVar("T")
 
 
-def log_output_file_head(output_filepath: str) -> None:
+def log_output_file_head(output_filepath: str, state: str) -> None:
     df = pd.read_csv(output_filepath)
     logging.info(f"""
-        \n
-        output file head - located at {output_filepath} :
-        \n
+    
+        {state} boxes head (5 records) - located at {output_filepath} :
         {df.head()}
+        
+        open the csv file to see the other orders (if any)
     """)
 
 

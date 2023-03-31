@@ -57,10 +57,14 @@ S, M & L in the `Temperature Bands` refers to the amount of ices that should be 
 Medium and Large box sizes for that particular range.
 
 ## Output
-Once the allocator has run, the output is placed here:
+Once the allocator has run, the output/s is placed here:
 
 ```commandline
 src/output/orders_assigned_w_ice.csv
+```
+If there are missing postcodes, then the box is skipped and added to a seperate output CSV.
+```commandline
+src/output/orders_skipped.csv
 ```
 
 The schema of this output is: 
@@ -74,7 +78,7 @@ orders_assigned_with_ice.csv -
 
 ## Example Execution Output
 ```commandline
-2023-03-31 17:02:40,961 | root | INFO | 
+2023-03-31 22:21:32,731 | root | INFO | 
              __  ______  ______       ______ ______  ______  __  __       ______  ______  __   __  ______ __  ______    
         /\ \/\  ___\/\  ___\     /\  == /\  __ \/\  ___\/\ \/ /      /\  ___\/\  __ \/\ "-.\ \/\  ___/\ \/\  ___\   
         \ \ \ \ \___\ \  __\     \ \  _-\ \  __ \ \ \___\ \  _"-.    \ \ \___\ \ \/\ \ \ \-.  \ \  __\ \ \ \ \__ \  
@@ -83,26 +87,43 @@ orders_assigned_with_ice.csv -
         
 
     
-2023-03-31 17:02:40,961 | root | INFO | Importing data
-2023-03-31 17:02:40,961 | root | INFO | reading csv file from - data/Boxes.csv
-2023-03-31 17:02:40,968 | root | INFO | csv read successfully
-2023-03-31 17:02:40,968 | root | INFO | reading csv file from - data/Temperature_bands.csv
-2023-03-31 17:02:40,969 | root | INFO | csv read successfully
-2023-03-31 17:02:40,969 | root | INFO | configuring ices...
-2023-03-31 17:02:41,960 | root | INFO | ices configured!
-2023-03-31 17:02:41,960 | root | INFO | writing csv file to - output/orders_assigned_w_ice.csv
-2023-03-31 17:02:41,965 | root | INFO | csv written successfully
-2023-03-31 17:02:41,972 | root | INFO | 
-        
-
-        output file head - located at output/orders_assigned_w_ice.csv :
-        
+2023-03-31 22:21:32,731 | root | INFO | Importing data
+2023-03-31 22:21:32,731 | root | INFO | reading csv file from - data/Boxes.csv
+2023-03-31 22:21:32,738 | root | INFO | csv read successfully
+2023-03-31 22:21:32,738 | root | INFO | reading csv file from - data/Temperature_bands.csv
+2023-03-31 22:21:32,739 | root | INFO | csv read successfully
+2023-03-31 22:21:32,739 | root | INFO | configuring ices...
+2023-03-31 22:21:33,154 | root | ERROR | err: not found - {"status":404,"error":"Invalid postcode"}
+2023-03-31 22:21:33,154 | root | ERROR | err: exception occurred when attempting to get and return latitude and longitude for postcode - 123
+2023-03-31 22:21:33,154 | root | INFO | 123 could not be fetched. Skipping box with box_id = GB231
+2023-03-31 22:21:40,280 | root | INFO | the following boxes were skipped:
+2023-03-31 22:21:40,280 | root | INFO | box_id = GB231, delivery_date = 2022-02-19 00:00:00
+2023-03-31 22:21:40,280 | root | INFO | ices configured!
+2023-03-31 22:21:40,280 | root | INFO | writing csv file to - output/orders_assigned_w_ice.csv
+2023-03-31 22:21:40,286 | root | INFO | csv written successfully
+2023-03-31 22:21:40,292 | root | INFO | 
+    
+        completed boxes head (5 records) - located at output/orders_assigned_w_ice.csv :
            box_id cool_pouch_size  number_of_ices
 0   GB231               M               2
-1  GB1481               M               2
-2  GB1681               M               2
+1  GB1849               S               2
+2   GB880               M               2
+3   GB138               M               2
+4    GB93               L               2
+        
+        open the csv file to see the other orders
     
-2023-03-31 17:02:41,972 | root | INFO | 
+2023-03-31 22:21:40,292 | root | INFO | writing csv file to - output/orders_skipped.csv
+2023-03-31 22:21:40,294 | root | INFO | csv written successfully
+2023-03-31 22:21:40,300 | root | INFO | 
+    
+        missing boxes head (5 records) - located at output/orders_skipped.csv :
+          box_id delivery_date  postcode box_size cool_pouch_size
+0  GB231    2022-02-19       123        L               M
+        
+        open the csv file to see the other orders (if any)
+    
+2023-03-31 22:21:40,300 | root | INFO | 
         
 
          (              (         )                         )      *      (      (                          
