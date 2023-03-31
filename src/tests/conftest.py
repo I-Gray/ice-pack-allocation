@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 import pytest
 from datetime import datetime
 
-from src.domain.models import Box, IceTemperatureRanges
+from domain.models import Box, IceTemperatureRanges, BoxAssignedIce
 
 
 @pytest.fixture
@@ -69,6 +69,22 @@ def mock_valid_temp_range_data() -> List[IceTemperatureRanges]:
             small=1,
             medium=2,
             large=2,
+        ),
+    ]
+
+
+@pytest.fixture
+def mock_box_assigned_ice_data() -> List[BoxAssignedIce]:
+    return [
+        BoxAssignedIce(
+            box_id='ID1',
+            cool_pouch_size='M',
+            number_of_ices=2
+        ),
+        BoxAssignedIce(
+            box_id='ID2',
+            cool_pouch_size='L',
+            number_of_ices=4
         ),
     ]
 

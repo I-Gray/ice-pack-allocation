@@ -1,3 +1,4 @@
+import logging
 import textwrap
 from datetime import datetime
 from io import StringIO
@@ -8,8 +9,8 @@ import pytest
 
 from domain import constants
 from domain.data_handle import get_boxes, get_temp_ranges
-from domain.icepack_configurator import IcePackConfigurator, assign_ice_packs_to_order
-from utils import read_csv
+from domain.icepack_configurator import assign_ice_packs_to_order, IcePackConfigurator
+from utils import read_csv, write_csv
 from unittest.mock import MagicMock, patch
 
 
@@ -66,3 +67,24 @@ def test_read_temp_range_csv(mock_valid_temp_range_raw_data):
     assert temp_ranges[0].small == 1
     assert temp_ranges[0].medium == 1
     assert temp_ranges[0].large == 1
+
+
+def test_write_csv_success(mock_box_assigned_ice_data):
+    file_path = "test.csv"
+    write_csv(file_path, mock_box_assigned_ice_data)
+    with open(file_path, "r") as f:
+        actual_boxes = f.read()
+
+    expected_header = "box_id,cool_pouch_size,number_of_ices\n"
+    expected_data = "ID1,M,2\nID2,L,4\n"
+    assert actual_boxes == expected_header + expected_data
+
+
+def test_write_csv_no_data(caplog):
+    file_path = "tmp.test.csv"
+    data = []
+
+    with caplog.at_level(logging.INFO):
+        write_csv(file_path, data)
+
+    assert "no data to write to csv output path " in caplog.text

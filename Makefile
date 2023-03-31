@@ -17,4 +17,5 @@ local-setup:
 run-tests:
 	echo 'running tests'
 	cd src && \
-	pytest .
+	coverage run -m pytest -sv ./tests && \
+	coverage report -m --fail-under=90

@@ -1,7 +1,7 @@
 import logging
 from typing import List, Tuple
 
-from src.domain.models import IceTemperatureRanges, Box, BoxAssignedIce
+from domain.models import IceTemperatureRanges, Box, BoxAssignedIce
 from utils import read_csv, write_csv
 
 

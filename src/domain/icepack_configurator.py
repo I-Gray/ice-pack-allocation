@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 from domain import constants
+from domain.exceptions import PostCodeNotFoundException
 from domain.models import Box, IceTemperatureRanges, BoxAssignedIce
 
 
@@ -11,15 +12,29 @@ class IcePackConfigurator:
     boxes: List[Box]
     temperature_ranges: List[IceTemperatureRanges]
     get_temp: callable
+    skipped_boxes: Optional[List[Box]] = None
 
     def pack_boxes_with_ices(self) -> List[BoxAssignedIce]:
         logging.info('configuring ices...')
         boxes_with_ice = []
         for box in self.boxes:
-            temperature = self.get_temp(box.postcode, box.delivery_date)
-            boxes_with_ice.append(
-                assign_ice_packs_to_order(box, self.temperature_ranges, temperature)
-            )
+            try:
+                temperature = self.get_temp(box.postcode, box.delivery_date)
+                boxes_with_ice.append(
+                    assign_ice_packs_to_order(box, self.temperature_ranges, temperature)
+                )
+            except PostCodeNotFoundException as e:
+                logging.info(f'{e.postcode} could not be fetched. Skipping box with ID {box.box_id}')
+                self.skipped_boxes.append(box)
+                continue
+
+        if self.skipped_boxes is not None:
+            logging.info('the following boxes were skipped:')
+            for skipped_box in self.skipped_boxes:
+                logging.info(
+                    f"box_id = {skipped_box.box_id}, "
+                    f"delivery_date = {skipped_box.delivery_date}"
+                )
 
         logging.info('ices configured!')
         return boxes_with_ice

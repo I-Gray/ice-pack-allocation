@@ -5,6 +5,8 @@ from typing import Tuple
 
 import requests
 
+from domain.exceptions import PostCodeNotFoundException
+
 
 @dataclass
 class WeatherService:
@@ -40,9 +42,14 @@ class WeatherService:
                 headers=headers,
                 params=query_params,
             )
-            if response.status_code != 200:
+            if response.status_code != 200 and (lat or lon) is not None:
                 logging.error(f"err: error fetching weather data - {response.text}")
                 raise Exception
+            elif (lat or lon) is None:
+                # Note: for some postcodes the postcode api returns None.
+                # for this POC, I set the temp to 25.
+                logging.debug('Unable to get weather data - setting temp to 25')
+                return 25
 
             json_rsp = response.json()
             return json_rsp["data"][0]["tavg"]
@@ -65,6 +72,9 @@ def get_lat_long_from_postcode(postcode: str) -> Tuple[float, float]:
     try:
         logging.debug(f"fetching latitude & longitude for postcode - {postcode}")
         response = requests.get("https://api.postcodes.io/postcodes/" + postcode)
+        if response.status_code == 404:
+            logging.error(f"err: not found - {response.text}")
+            raise PostCodeNotFoundException(postcode)
         if response.status_code != 200:
             logging.error(f"err: response not OK - {response.text}")
             raise Exception
