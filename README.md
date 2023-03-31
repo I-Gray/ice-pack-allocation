@@ -6,6 +6,8 @@ Allocates a specified number of ice-packs to a customers box calculated by consi
 
 
 ## Set-up
+
+### Local Execution
 1. Clone the repository
 2. In the `src` directory, create a file named `config.json` and copy `config.example.json` to the file.
 3. Add a valid `meteostat_api_key` in the value section of the secret.
@@ -13,9 +15,21 @@ Allocates a specified number of ice-packs to a customers box calculated by consi
 ```commandline
 make run-script
 ```
-4. If the run is successful, the output 
+5. If the run is successful, the output files will be accessible in the `src/output` folder.
 
-## Running Tests
+### Docker
+Before proceeding, ensure youy have docker installed and have the daemon running. If not you can download docker [here](https://docs.docker.com/engine/install/)
+1. Run the following command in the root directory of the repo:
+```commandline
+docker build -t ice-pack-allocator .
+```
+2. Once the image is built, run:
+```commandline
+docker run -p 5002:8080 ice-pack-allocator
+```
+3. If the run is successful, the output files will be accessible in the src/output folder within the container.
+
+## Tests
 To run the all the unit tests, run the following make command in the root directory:
 ```commandline
 make run-tests
@@ -63,6 +77,7 @@ Once the allocator has run, the output/s is placed here:
 src/output/orders_assigned_w_ice.csv
 ```
 If there are missing postcodes, then the box is skipped and added to a seperate output CSV.
+Note: The schema for these missing orders is the `Box` schema that is defined in the `models.py`.
 ```commandline
 src/output/orders_skipped.csv
 ```
@@ -76,7 +91,35 @@ orders_assigned_with_ice.csv -
     number_of_ices: int
 ```
 
-## Example Execution Output
+### Models Schemas
+The schemas in the models are slightly altered from the CSV columns to improve readability.
+```
+@dataclass
+class IceTemperatureRanges:
+    temp_min: int
+    temp_max: int
+    small: int
+    medium: int
+    large: int
+
+
+@dataclass
+class Box:
+    box_id: str
+    delivery_date: datetime
+    postcode: str
+    box_size: str
+    cool_pouch_size: str
+
+
+@dataclass
+class BoxAssignedIce:
+    box_id: str
+    cool_pouch_size: str
+    number_of_ices: int
+```
+
+## Example Output Execution
 ```commandline
 2023-03-31 22:21:32,731 | root | INFO | 
              __  ______  ______       ______ ______  ______  __  __       ______  ______  __   __  ______ __  ______    
