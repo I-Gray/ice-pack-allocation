@@ -1,16 +1,13 @@
 import logging
-from datetime import datetime
-from io import StringIO
-from typing import Tuple
+from unittest.mock import Mock
 
-from unittest.mock import Mock, patch, MagicMock
 import pytest
 
 from domain import constants
 from domain.data_handle import get_boxes, get_temp_ranges
 from domain.exceptions import PostCodeNotFoundException
 from domain.icepack_configurator import assign_ice_packs_to_order, IcePackConfigurator
-from utils import read_csv, write_csv
+from utils import write_csv
 
 
 @pytest.mark.parametrize(

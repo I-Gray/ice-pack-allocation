@@ -3,7 +3,7 @@ name: PR Check
 on: pull_request
 
 jobs:
-  lint:
+  Check Linting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -20,7 +20,7 @@ jobs:
       - name: Run linting
         run: flake8 --config tox.ini
 
-  test:
+  Run Test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
