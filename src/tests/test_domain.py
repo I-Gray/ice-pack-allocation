@@ -1,12 +1,16 @@
 import logging
-from unittest.mock import Mock
+from datetime import datetime
+from io import StringIO
+from typing import Tuple
 
+from unittest.mock import Mock, patch, MagicMock
 import pytest
 
 from domain import constants
 from domain.data_handle import get_boxes, get_temp_ranges
+from domain.exceptions import PostCodeNotFoundException
 from domain.icepack_configurator import assign_ice_packs_to_order, IcePackConfigurator
-from utils import write_csv
+from utils import read_csv, write_csv
 
 
 @pytest.mark.parametrize(
@@ -37,10 +41,16 @@ def test_icepack_config(mock_valid_boxes_data, mock_valid_temp_range_data):
         temperature_ranges=mock_valid_temp_range_data,
         get_temp=get_temp_mock
     )
-    boxes_with_ice = ipc.pack_boxes_with_ices()
+    boxes_with_ice, _ = ipc.pack_boxes_with_ices()
     assert boxes_with_ice[0].number_of_ices == 1
     assert boxes_with_ice[1].number_of_ices == 2
     assert boxes_with_ice[2].number_of_ices == constants.MAX_NUM_ICES
+
+    get_temp_mock.side_effect = [0, PostCodeNotFoundException('TN257GH'), 0]
+    boxes_with_ice, skipped_boxes = ipc.pack_boxes_with_ices()
+    assert boxes_with_ice[0].number_of_ices == 1
+    assert skipped_boxes[0].postcode == 'TN257GH'
+    assert boxes_with_ice[1].number_of_ices == 1
 
 
 def test_read_boxes_csv(mock_valid_boxes_raw_data):
